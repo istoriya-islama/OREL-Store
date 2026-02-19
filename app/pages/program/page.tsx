@@ -1,5 +1,6 @@
 import Cover from '@/app/Components/Cover'
 import Header from '@/app/Components/Header'
+import { FaTerminal } from "react-icons/fa";
 
 export default function Program() {
 	return (
@@ -45,7 +46,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Calculator'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -70,7 +71,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Weather'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -94,7 +95,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Clock'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -120,7 +121,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Notepad'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -144,7 +145,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Azan'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -168,7 +169,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Paint'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -194,7 +195,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Screenshot'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -220,7 +221,7 @@ export default function Program() {
 
 							<div className='mt-4 pt-4 border-t   border-gray-700'>
 								<a
-									href=''
+									href='/pages/programs/Translator'
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
 									Открыть <span className='transition-all'>→</span>
@@ -237,7 +238,7 @@ export default function Program() {
 							</div>
 
 							<h3 className='text-xl font-bold text-white mb-2'>
-								AiIstoriya История ИИ Desktop
+								IstoriyaIslamaIT История ИИ Desktop
 							</h3>
 
 							<p className='text-gray-400 text-sm'>
@@ -248,8 +249,30 @@ export default function Program() {
 								<span
 									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
 								>
-									Скоро выйдет <span className='transition-all'>...</span>
+								  Может выйти в 2027<span className='transition-all'>...</span>
 								</span>
+							</div>
+						</li>
+						<li className='bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl p-6 hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 cursor-pointer group'>
+							<div className='w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
+								<FaTerminal className="w-12 h-12 drop-shadow-lg group-hover:drop-shadow-2xl transition-all"/>
+							</div>
+
+							<h3 className='text-xl font-bold text-white mb-2'>
+								All IT (Всё о програмировании) sf - Search Utility
+							</h3>
+
+							<p className='text-gray-400 text-sm'>
+								Быстрый посик по фалам из терминала
+							</p>
+
+							<div className='mt-4 pt-4 border-t   border-gray-700'>
+								<a
+									href='/pages/programs/sf'
+									className='inline-flex items-center gap-2 text-gray-500 text-sm group-hover:text-gray-300 transition-colors group-hover:gap-3'
+								>
+									Открыть <span className='transition-all'>→</span>
+								</a>
 							</div>
 						</li>
 					</ul>

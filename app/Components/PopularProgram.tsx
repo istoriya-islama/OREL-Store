@@ -8,49 +8,49 @@ export default function PopularProgram() {
 		{
 			title: 'OREL Калькулятор',
 			items: ['Мощный калькулятор', 'Сложные вычисления', 'Быстрая работа'],
-			url: '',
+			url: '/pages/programs/Calculator',
 			color: 'from-gray-800 to-gray-900',
 		},
 		{
 			title: 'OREL Погода',
 			items: ['Точный прогноз', 'Метеоданные', 'Умные рекомендации'],
-			url: '',
+			url: '/pages/programs/Weather',
 			color: 'from-slate-800 to-slate-900',
 		},
 		{
 			title: 'OREL Часы',
 			items: ['Секундомер', 'Таймер', 'Многофункциональность'],
-			url: '',
+			url: '/pages/programs/Clock',
 			color: 'from-zinc-800 to-zinc-900',
 		},
 		{
 			title: 'OREL Блокнот',
 			items: ['Быстрые заметки', 'Текстовый редактор', 'Удобный интерфейс'],
-			url: '',
+			url: '/pages/programs/Notepad',
 			color: 'from-neutral-800 to-neutral-900',
 		},
 		{
 			title: 'OREL Азан',
 			items: ['Время намазов', 'Азан', 'Напоминания'],
-			url: '',
+			url: '/pages/programs/Azan',
 			color: 'from-stone-800 to-stone-900',
 		},
 		{
 			title: 'OREL Paint',
 			items: ['Рисование', 'Графический редактор', 'Простота'],
-			url: '',
+			url: '/pages/programs/Paint',
 			color: 'from-gray-700 to-gray-900',
 		},
 		{
 			title: 'OREL Скриншот',
 			items: ['Скриншоты', 'Запись экрана', 'Быстро и удобно'],
-			url: '',
+			url: '/pages/programs/Screenshot',
 			color: 'from-slate-700 to-slate-900',
 		},
 		{
 			title: 'OREL Переводчик',
 			items: ['Мгновенный перевод', 'Много языков', 'Высокая точность'],
-			url: '',
+			url: '/pages/programs/Translator',
 			color: 'from-zinc-700 to-zinc-900',
 		},
 	]
@@ -123,7 +123,8 @@ export default function PopularProgram() {
 									{item}
 								</li>
 							))}
-						</ul><br/>
+						</ul>
+						<br />
 						<a
 							href={sections[activeIndex].url}
 							className='flex items-center gap-3 w-full'
