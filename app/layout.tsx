@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OREL Store Beta",
+  title: "OREL Store",
   description: "App Store for OREL program and OREL Theme Store",
 };
 

@@ -2,14 +2,6 @@
 import { useEffect, useState } from 'react'
 import { FiDownloadCloud } from 'react-icons/fi'
 
-// ╔══════════════════════════════════════════════════════╗
-// ║         AppPageTemplate — OREL (TypeScript)          ║
-// ║   Использование:                                     ║
-// ║   <AppPageTemplate app={APP_DATA} />                 ║
-// ╚══════════════════════════════════════════════════════╝
-
-// ─── Типы ────────────────────────────────
-
 export interface AppFeature {
 	icon: string
 	title: string
@@ -25,10 +17,11 @@ export interface AppChangelogEntry {
 export interface AppReview {
 	id?: number
 	author: string
-	rating: number // 1–5
+	rating: number
 	text: string
 	date: string
 	isUserReview?: boolean
+	sessionId?: string
 }
 
 export interface AppData {
@@ -38,8 +31,8 @@ export interface AppData {
 	releaseDate: string
 	icon: string
 	heroCover: string
-	heroIsVideo?: boolean // по умолчанию false
-	downloadUrl: string // пусто или '#' — скрывает кнопку
+	heroIsVideo?: boolean
+	downloadUrl: string
 	description: string
 	features: AppFeature[]
 	screenshots?: string[]
@@ -51,14 +44,13 @@ interface AppPageTemplateProps {
 	app: AppData
 }
 
-// ─── Stars (display) ─────────────────────
-
-interface StarsProps {
+function Stars({
+	rating,
+	size = 'sm',
+}: {
 	rating: number
 	size?: 'sm' | 'lg'
-}
-
-function Stars({ rating, size = 'sm' }: StarsProps) {
+}) {
 	const cls = size === 'sm' ? 'text-sm' : 'text-lg'
 	return (
 		<span className={cls}>
@@ -76,15 +68,14 @@ function Stars({ rating, size = 'sm' }: StarsProps) {
 	)
 }
 
-// ─── StarPicker (форма) ──────────────────
-
-interface StarPickerProps {
+function StarPicker({
+	value,
+	onChange,
+}: {
 	value: number
 	onChange: (v: number) => void
-}
-
-function StarPicker({ value, onChange }: StarPickerProps) {
-	const [hovered, setHovered] = useState<number>(0)
+}) {
+	const [hovered, setHovered] = useState(0)
 	return (
 		<div className='flex gap-1'>
 			{[1, 2, 3, 4, 5].map(i => (
@@ -109,8 +100,6 @@ function StarPicker({ value, onChange }: StarPickerProps) {
 	)
 }
 
-// ─── Разделитель ─────────────────────────
-
 function Divider() {
 	return (
 		<div className='max-w-6xl mx-auto px-6 md:px-12'>
@@ -119,15 +108,15 @@ function Divider() {
 	)
 }
 
-// ─── Hero ────────────────────────────────
-
-interface HeroProps {
+function Hero({
+	app,
+	avgRating,
+	totalReviews,
+}: {
 	app: AppData
 	avgRating: string
 	totalReviews: number
-}
-
-function Hero({ app, avgRating, totalReviews }: HeroProps) {
+}) {
 	return (
 		<section className='relative w-full overflow-hidden'>
 			<div
@@ -152,7 +141,6 @@ function Hero({ app, avgRating, totalReviews }: HeroProps) {
 				)}
 				<div className='absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent' />
 			</div>
-
 			<div className='absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-12'>
 				<div className='max-w-6xl mx-auto flex items-end gap-6'>
 					<div className='w-20 h-20 md:w-24 md:h-24 bg-gray-800/80 backdrop-blur border border-gray-700 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-2xl'>
@@ -162,7 +150,6 @@ function Hero({ app, avgRating, totalReviews }: HeroProps) {
 							className='w-14 h-14 md:w-16 md:h-16'
 						/>
 					</div>
-
 					<div className='flex-1 min-w-0'>
 						<h1 className='text-2xl md:text-4xl font-black text-white leading-tight drop-shadow-lg'>
 							{app.name}
@@ -182,7 +169,6 @@ function Hero({ app, avgRating, totalReviews }: HeroProps) {
 							<span className='text-gray-400 text-sm'>v{app.version}</span>
 						</div>
 					</div>
-
 					<div className='hidden md:flex flex-col gap-2 flex-shrink-0'>
 						<a
 							href={app.downloadUrl}
@@ -197,8 +183,6 @@ function Hero({ app, avgRating, totalReviews }: HeroProps) {
 	)
 }
 
-// ─── MobileButtons ───────────────────────
-
 function MobileButtons({ app }: { app: AppData }) {
 	return (
 		<div className='flex md:hidden gap-3 px-6 mt-4'>
@@ -211,8 +195,6 @@ function MobileButtons({ app }: { app: AppData }) {
 		</div>
 	)
 }
-
-// ─── AboutSection ────────────────────────
 
 function AboutSection({ app }: { app: AppData }) {
 	return (
@@ -248,10 +230,8 @@ function AboutSection({ app }: { app: AppData }) {
 	)
 }
 
-// ─── Gallery ─────────────────────────────
-
 function Gallery({ screenshots }: { screenshots: string[] }) {
-	const [active, setActive] = useState<number>(0)
+	const [active, setActive] = useState(0)
 	if (screenshots.length === 0) return null
 	return (
 		<section className='max-w-6xl mx-auto px-6 md:px-12 py-10'>
@@ -272,11 +252,7 @@ function Gallery({ screenshots }: { screenshots: string[] }) {
 						key={i}
 						onClick={() => setActive(i)}
 						style={{ height: 70 }}
-						className={`flex-shrink-0 w-28 rounded-xl overflow-hidden border-2 transition-all ${
-							active === i
-								? 'border-white scale-105'
-								: 'border-gray-700 opacity-50 hover:opacity-80'
-						}`}
+						className={`flex-shrink-0 w-28 rounded-xl overflow-hidden border-2 transition-all ${active === i ? 'border-white scale-105' : 'border-gray-700 opacity-50 hover:opacity-80'}`}
 					>
 						<img
 							src={src}
@@ -290,10 +266,8 @@ function Gallery({ screenshots }: { screenshots: string[] }) {
 	)
 }
 
-// ─── Changelog ───────────────────────────
-
 function Changelog({ changelog }: { changelog: AppChangelogEntry[] }) {
-	const [open, setOpen] = useState<number>(0)
+	const [open, setOpen] = useState(0)
 	if (changelog.length === 0) return null
 	return (
 		<section className='max-w-6xl mx-auto px-6 md:px-12 py-10'>
@@ -343,15 +317,15 @@ function Changelog({ changelog }: { changelog: AppChangelogEntry[] }) {
 	)
 }
 
-// ─── ReviewCard ──────────────────────────
-
-interface ReviewCardProps {
+function ReviewCard({
+	r,
+	canDelete,
+	onDelete,
+}: {
 	r: AppReview
 	canDelete: boolean
 	onDelete?: () => void
-}
-
-function ReviewCard({ r, canDelete, onDelete }: ReviewCardProps) {
+}) {
 	return (
 		<div className='bg-gray-800/40 border border-gray-700/50 rounded-2xl p-5 hover:bg-gray-800/60 transition-colors relative group'>
 			{canDelete && (
@@ -382,37 +356,68 @@ function ReviewCard({ r, canDelete, onDelete }: ReviewCardProps) {
 	)
 }
 
-// ─── Reviews + форма ─────────────────────
+// ─── sessionId чтобы знать свои отзывы ───
+function getSessionId(): string {
+	const key = 'orel-session-id'
+	try {
+		let id = sessionStorage.getItem(key)
+		if (!id) {
+			id = `s-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+			sessionStorage.setItem(key, id)
+		}
+		return id
+	} catch {
+		return `s-${Date.now()}`
+	}
+}
 
-interface ReviewsProps {
+// ─── Reviews + форма (localStorage) ──────
+// TODO: когда будет Supabase — заменить loadReviews/saveReviews
+
+function Reviews({
+	appName,
+	defaultReviews,
+	onRatingChange,
+}: {
 	appName: string
 	defaultReviews: AppReview[]
 	onRatingChange: (rating: string, count: number) => void
-}
-
-function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
+}) {
 	const STORAGE_KEY = `orel-reviews-${appName}`
-	const [userReviews, setUserReviews] = useState<AppReview[]>([])
-	const [loaded, setLoaded] = useState<boolean>(false)
-	const [author, setAuthor] = useState<string>('')
-	const [text, setText] = useState<string>('')
-	const [starValue, setStarValue] = useState<number>(0)
-	const [error, setError] = useState<string>('')
-	const [success, setSuccess] = useState<boolean>(false)
-	const [showForm, setShowForm] = useState<boolean>(false)
+
+	const [savedReviews, setSavedReviews] = useState<AppReview[]>([])
+	const [loaded, setLoaded] = useState(false)
+	const [sessionId] = useState(() =>
+		typeof window !== 'undefined' ? getSessionId() : `temp-${Date.now()}`,
+	)
+
+	const [author, setAuthor] = useState('')
+	const [text, setText] = useState('')
+	const [starValue, setStarValue] = useState(0)
+	const [error, setError] = useState('')
+	const [success, setSuccess] = useState(false)
+	const [showForm, setShowForm] = useState(false)
+
+	// ✅ localStorage — работает в dev и prod
+	function loadReviews() {
+		try {
+			const raw = localStorage.getItem(STORAGE_KEY)
+			if (raw) setSavedReviews(JSON.parse(raw) as AppReview[])
+		} catch {}
+		setLoaded(true)
+	}
+
+	function saveReviews(list: AppReview[]) {
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
+		} catch {}
+	}
 
 	useEffect(() => {
-		async function load() {
-			try {
-				const res = localStorage.getItem(STORAGE_KEY)
-				if (res) setUserReviews(JSON.parse(res) as AppReview[])
-			} catch {}
-			setLoaded(true)
-		}
-		load()
+		loadReviews()
 	}, [STORAGE_KEY])
 
-	const allReviews: AppReview[] = [...userReviews, ...defaultReviews]
+	const allReviews = [...savedReviews, ...defaultReviews]
 	const avgRating =
 		allReviews.length > 0
 			? (
@@ -422,13 +427,7 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 
 	useEffect(() => {
 		if (loaded) onRatingChange(avgRating, allReviews.length)
-	}, [userReviews, loaded])
-
-	async function saveReviews(list: AppReview[]) {
-		try {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-		} catch {}
-	}
+	}, [savedReviews, loaded])
 
 	function handleSubmit() {
 		if (!author.trim()) return setError('Введите ваше имя')
@@ -448,9 +447,10 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 			text: text.trim(),
 			date: dateStr,
 			isUserReview: true,
+			sessionId,
 		}
-		const updated = [newReview, ...userReviews]
-		setUserReviews(updated)
+		const updated = [newReview, ...savedReviews]
+		setSavedReviews(updated)
 		saveReviews(updated)
 		setAuthor('')
 		setText('')
@@ -461,8 +461,8 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 	}
 
 	function handleDelete(id: number) {
-		const updated = userReviews.filter(r => r.id !== id)
-		setUserReviews(updated)
+		const updated = savedReviews.filter(r => r.id !== id)
+		setSavedReviews(updated)
 		saveReviews(updated)
 	}
 
@@ -473,7 +473,7 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 					<h2 className='text-xl font-bold text-white'>Отзывы</h2>
 					{success && (
 						<span className='text-green-400 text-sm animate-pulse'>
-							✓ Отзыв опубликован!
+							✓ Опубликовано!
 						</span>
 					)}
 				</div>
@@ -554,11 +554,11 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 				</div>
 			) : (
 				<div className='grid md:grid-cols-3 gap-4'>
-					{userReviews.map(r => (
+					{savedReviews.map(r => (
 						<ReviewCard
 							key={r.id}
-							r={r}
-							canDelete
+							r={{ ...r, isUserReview: r.sessionId === sessionId }}
+							canDelete={r.sessionId === sessionId}
 							onDelete={() => handleDelete(r.id!)}
 						/>
 					))}
@@ -571,10 +571,7 @@ function Reviews({ appName, defaultReviews, onRatingChange }: ReviewsProps) {
 	)
 }
 
-// ╔══════════════════════════════════════════════════════╗
-// ║              ГЛАВНЫЙ ЭКСПОРТИРУЕМЫЙ КОМПОНЕНТ        ║
-// ╚══════════════════════════════════════════════════════╝
-
+// ─── ГЛАВНЫЙ КОМПОНЕНТ ───────────────────
 export default function AppPageTemplate({ app }: AppPageTemplateProps) {
 	const initialAvg =
 		app.reviews && app.reviews.length > 0
@@ -583,43 +580,35 @@ export default function AppPageTemplate({ app }: AppPageTemplateProps) {
 				).toFixed(1)
 			: '—'
 
-	const [avgRating, setAvgRating] = useState<string>(initialAvg)
-	const [totalReviews, setTotalReviews] = useState<number>(
-		app.reviews?.length ?? 0,
-	)
-
-	function handleRatingChange(rating: string, count: number) {
-		setAvgRating(rating)
-		setTotalReviews(count)
-	}
+	const [avgRating, setAvgRating] = useState(initialAvg)
+	const [totalReviews, setTotalReviews] = useState(app.reviews?.length ?? 0)
 
 	return (
 		<div className='relative'>
 			<Hero app={app} avgRating={avgRating} totalReviews={totalReviews} />
 			<MobileButtons app={app} />
-
 			<Divider />
 			<AboutSection app={app} />
-
 			{app.screenshots && app.screenshots.length > 0 && (
 				<>
 					<Divider />
 					<Gallery screenshots={app.screenshots} />
 				</>
 			)}
-
 			{app.changelog && app.changelog.length > 0 && (
 				<>
 					<Divider />
 					<Changelog changelog={app.changelog} />
 				</>
 			)}
-
 			<Divider />
 			<Reviews
 				appName={app.name}
 				defaultReviews={app.reviews ?? []}
-				onRatingChange={handleRatingChange}
+				onRatingChange={(rating, count) => {
+					setAvgRating(rating)
+					setTotalReviews(count)
+				}}
 			/>
 		</div>
 	)
