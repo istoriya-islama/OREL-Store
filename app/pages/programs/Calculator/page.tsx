@@ -10,12 +10,12 @@ import type { AppData } from '@/app/types/app.type'
 const calculatorApp: AppData = {
 	name: 'OREL Калькулятор',
 	tagline: 'Мощный калькулятор для сложных вычислений',
-	version: '2.8.4',
-	releaseDate: '24 октября 2025',
+	version: '2.9',
+	releaseDate: '9 марта 2026',
 	icon: 'https://istoriya-islama.github.io/OREL/Components/img/newCalculator.ico',
 	heroCover: '/calculator.jpg',
 	heroIsVideo: false,
-	downloadUrl: 'https://istoriya-islama.github.io/OREL/Arhiv Calculator 2.8.4 installer.exe',
+	downloadUrl: 'https://istoriya-islama.github.io/OREL/OREL Calculator 2.9 Amber installer.exe',
 	description:
 		'OREL Калькулятор — профессиональный инструмент для быстрых вычислений.',
 	features: [
@@ -28,6 +28,11 @@ const calculatorApp: AppData = {
 		'/Screns/calculator 2.png',
 	],
 	changelog: [
+		{
+			version: '2.9',
+			date: '9 марта 2026',
+			changes: ['Новый дезайн', 'Добавлены новые функции в режиме Инженерного калькулятора', 'Добавлены горячие клавиши', 'Растягивание окон', 'Кодовое имя: Янтарь', 'Исправлены баги']
+		},
 		{
 			version: '2.8.4',
 			date: '24 окт 2025',
