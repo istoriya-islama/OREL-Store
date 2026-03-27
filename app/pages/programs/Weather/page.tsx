@@ -11,8 +11,8 @@ const calculatorApp: AppData = {
 	name: 'OREL Погода',
 	tagline:
 		'Точный прогноз погоды с подробными метеоданными и с умнами рекомандациями',
-	version: '2.3',
-	releaseDate: '10 декобря 2025',
+	version: '2.4',
+	releaseDate: '27 марта 2026',
 	icon: 'https://istoriya-islama.github.io/OREL/Components/img/newWeather.ico',
 	heroCover: '/weather.jpg',
 	heroIsVideo: false,
