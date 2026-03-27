@@ -17,7 +17,7 @@ const calculatorApp: AppData = {
 	heroCover: '/weather.jpg',
 	heroIsVideo: false,
 	downloadUrl:
-		'https://istoriya-islama.github.io/OREL/OREL Weather 2.3 Bamboo Grove.exe',
+		'https://istoriya-islama.github.io/OREL/OREL Weather 2.4 Taiga installer.exe',
 	description:
 		'Точный прогноз погоды с подробными метеоданными и с умнами рекомандациями.',
 	features: [
@@ -58,8 +58,21 @@ const calculatorApp: AppData = {
 		'/Screns/weather 3.png',
 		'/Screns/weather 4.png',
 		'/Screns/weather 5.png',
+		'/Screns/weather 6.png',
+		'/Screns/weather 7.png',
 	],
 	changelog: [
+		{
+			version: '2.4',
+			date: '27 марта 2026',
+			changes: [
+				'Добавленно дневного часа',
+				'Вчера Ai',
+				'Дополнительные настройки Режим и (Темы)',
+				'Выход OREL Погода 1.0 Ai',
+				'Исправлены баги',
+			],
+		},
 		{
 			version: '2.3',
 			date: '10 дек 2025',
