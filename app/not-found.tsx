@@ -2,12 +2,6 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-// ╔══════════════════════════════════════════════════╗
-// ║            OREL — Страница 404                   ║
-// ║   Файл: app/not-found.tsx  (Next.js App Router)  ║
-// ╚══════════════════════════════════════════════════╝
-
-// ─── Глитч-эффект для "404" ──────────────
 function GlitchText() {
 	const [glitch, setGlitch] = useState<boolean>(false)
 
@@ -20,9 +14,12 @@ function GlitchText() {
 	}, [])
 
 	return (
-		<div className='relative select-none' style={{ fontFamily: "'Courier New', monospace" }}>
+		<div
+			className='relative select-none'
+			style={{ fontFamily: "'Courier New', monospace" }}
+		>
 			<span
-				className='text-[7rem] md:text-[10rem] font-black leading-none text-white block'
+				className='text-[6rem] sm:text-[10rem] font-black leading-none text-white block'
 				style={{
 					textShadow: glitch ? '4px 0 #ff003c, -4px 0 #00f0ff' : 'none',
 					transition: 'text-shadow 0.05s',
@@ -32,7 +29,7 @@ function GlitchText() {
 			</span>
 			{glitch && (
 				<span
-					className='absolute inset-0 text-[7rem] md:text-[10rem] font-black leading-none block'
+					className='absolute inset-0 text-[6rem] sm:text-[10rem] font-black leading-none block'
 					style={{
 						color: '#ff003c',
 						clipPath: 'polygon(0 30%, 100% 30%, 100% 50%, 0 50%)',
@@ -46,7 +43,7 @@ function GlitchText() {
 			)}
 			{glitch && (
 				<span
-					className='absolute inset-0 text-[7rem] md:text-[10rem] font-black leading-none block'
+					className='absolute inset-0 text-[6rem] sm:text-[10rem] font-black leading-none block'
 					style={{
 						color: '#00f0ff',
 						clipPath: 'polygon(0 60%, 100% 60%, 100% 75%, 0 75%)',
@@ -62,7 +59,6 @@ function GlitchText() {
 	)
 }
 
-// ─── Частицы ─────────────────────────────
 interface Particle {
 	id: number
 	x: number
@@ -87,7 +83,9 @@ function Particles() {
 		}
 		setSize()
 
-		const particles: Particle[] = Array.from({ length: 50 }, (_, i) => ({
+		// Меньше частиц на мобилке для производительности
+		const count = window.innerWidth < 640 ? 25 : 50
+		const particles: Particle[] = Array.from({ length: count }, (_, i) => ({
 			id: i,
 			x: Math.random() * canvas.width,
 			y: Math.random() * canvas.height,
@@ -132,7 +130,6 @@ function Particles() {
 	)
 }
 
-// ─── Сканлайны ───────────────────────────
 function Scanlines() {
 	return (
 		<div
@@ -146,7 +143,6 @@ function Scanlines() {
 	)
 }
 
-// ─── Мигающий курсор ─────────────────────
 function Cursor() {
 	const [visible, setVisible] = useState<boolean>(true)
 	useEffect(() => {
@@ -161,7 +157,6 @@ function Cursor() {
 	)
 }
 
-// ─── Терминал ────────────────────────────
 const LOG_LINES: string[] = [
 	'> Инициализация OREL OS...',
 	'> Поиск страницы...',
@@ -178,7 +173,6 @@ function TerminalLog() {
 	useEffect(() => {
 		let i = 0
 		const interval = setInterval(() => {
-			// ✅ FIX: сохраняем строку в переменную и проверяем перед setState
 			const nextLine = LOG_LINES[i]
 			if (i < LOG_LINES.length && typeof nextLine === 'string') {
 				setLines(prev => [...prev, nextLine])
@@ -197,7 +191,6 @@ function TerminalLog() {
 			style={{ fontFamily: "'Courier New', monospace" }}
 		>
 			{lines.map((line, i) => {
-				// ✅ FIX: guard — если line не строка, пропускаем
 				if (typeof line !== 'string') return null
 				const isError =
 					line.includes('ERROR') ||
@@ -208,7 +201,11 @@ function TerminalLog() {
 					<div
 						key={i}
 						className={`text-xs leading-5 ${
-							isError ? 'text-red-400' : isLast ? 'text-gray-300' : 'text-gray-600'
+							isError
+								? 'text-red-400'
+								: isLast
+									? 'text-gray-300'
+									: 'text-gray-600'
 						}`}
 					>
 						{line}
@@ -225,7 +222,6 @@ function TerminalLog() {
 	)
 }
 
-// ─── Страница 404 ────────────────────────
 export default function NotFound() {
 	const [mounted, setMounted] = useState<boolean>(false)
 
@@ -235,45 +231,44 @@ export default function NotFound() {
 	}, [])
 
 	return (
-		// ✅ FIX: overflow-hidden + min-h-screen без max-h чтобы не резало на маленьких экранах
 		<div className='min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden'>
-			{/* Фон */}
 			<div className='fixed inset-0 bg-gradient-to-br from-black via-gray-950 to-black' />
 
-			{/* Сетка */}
 			<div
 				className='fixed inset-0 opacity-[0.04] pointer-events-none'
 				style={{
 					backgroundImage:
 						'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-					backgroundSize: '40px 40px',
+					// Мельче сетка на мобилке
+					backgroundSize: 'clamp(25px, 5vw, 40px) clamp(25px, 5vw, 40px)',
 				}}
 			/>
 
-			{/* Свечение */}
 			<div
 				className='fixed pointer-events-none'
 				style={{
-					top: '50%', left: '50%',
+					top: '50%',
+					left: '50%',
 					transform: 'translate(-50%, -50%)',
-					width: 500, height: 500,
-					background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)',
+					// Меньше свечение на мобилке
+					width: 'min(500px, 90vw)',
+					height: 'min(500px, 90vw)',
+					background:
+						'radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)',
 				}}
 			/>
 
 			<Particles />
 			<Scanlines />
 
-			{/* ✅ FIX: контент ограничен по ширине, всё внутри экрана */}
 			<div
-				className='relative z-10 flex flex-col items-center text-center w-full max-w-sm px-5'
+				className='relative z-10 flex flex-col items-center text-center w-full max-w-sm px-5 py-8'
 				style={{
 					opacity: mounted ? 1 : 0,
 					transform: mounted ? 'translateY(0)' : 'translateY(16px)',
 					transition: 'opacity 0.6s ease, transform 0.6s ease',
 				}}
 			>
-				{/* Бейдж */}
 				<div
 					className='mb-3 px-3 py-1 border border-gray-700 rounded-full text-gray-500 text-xs tracking-widest uppercase'
 					style={{ fontFamily: "'Courier New', monospace" }}
@@ -281,46 +276,44 @@ export default function NotFound() {
 					OREL OS · Ошибка
 				</div>
 
-				{/* 404 с глитчем */}
 				<GlitchText />
 
-				{/* Заголовок */}
 				<h1
-					className='text-lg font-bold text-white mt-1 mb-1 tracking-tight'
+					className='text-base sm:text-lg font-bold text-white mt-1 mb-1 tracking-tight'
 					style={{ fontFamily: "'Courier New', monospace" }}
 				>
 					Страница не найдена
 				</h1>
-				<p className='text-gray-500 text-xs mb-5 leading-5'>
+				<p className='text-gray-500 text-xs mb-5 leading-5 max-w-[260px]'>
 					Запрошенный путь не существует или был удалён.
 				</p>
 
-				{/* Терминал */}
 				<TerminalLog />
 
-				{/* Кнопки */}
-				<div className='flex flex-col sm:flex-row gap-2 w-full'>
+				{/* Кнопки: на мобилке всегда колонка, на sm+ строка */}
+				<div className='flex flex-col gap-2 w-full'>
 					<Link
 						href='/'
-						className='flex-1 py-2.5 bg-white text-black font-bold rounded-xl text-sm text-center hover:bg-gray-200 transition-all hover:scale-105'
+						className='w-full py-3 bg-white text-black font-bold rounded-xl text-sm text-center hover:bg-gray-200 active:scale-95 transition-all'
 					>
 						← На главную
 					</Link>
-					<Link
-						href='/pages/program'
-						className='flex-1 py-2.5 bg-transparent border border-gray-700 text-gray-400 font-semibold rounded-xl text-sm text-center hover:border-gray-500 hover:text-white transition-all'
-					>
-						Программы
-					</Link>
-                    <Link
-						href='/pages/modes'
-						className='flex-1 py-2.5 bg-transparent border border-gray-700 text-gray-400 font-semibold rounded-xl text-sm text-center hover:border-gray-500 hover:text-white transition-all'
-					>
-						Режимы
-					</Link>
+					<div className='flex gap-2 w-full'>
+						<Link
+							href='/pages/program'
+							className='flex-1 py-3 bg-transparent border border-gray-700 text-gray-400 font-semibold rounded-xl text-sm text-center hover:border-gray-500 hover:text-white active:scale-95 transition-all'
+						>
+							Программы
+						</Link>
+						<Link
+							href='/pages/modes'
+							className='flex-1 py-3 bg-transparent border border-gray-700 text-gray-400 font-semibold rounded-xl text-sm text-center hover:border-gray-500 hover:text-white active:scale-95 transition-all'
+						>
+							Режимы
+						</Link>
+					</div>
 				</div>
 
-				{/* Футер */}
 				<div
 					className='mt-6 text-gray-700 text-xs tracking-widest'
 					style={{ fontFamily: "'Courier New', monospace" }}
