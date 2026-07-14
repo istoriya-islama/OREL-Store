@@ -6,6 +6,7 @@ interface ProgramCardProps {
 	description: string
 	href?: string
 	linkLabel?: string
+	badge?: string
 }
 
 export default function ProgramCard({
@@ -14,41 +15,42 @@ export default function ProgramCard({
 	description,
 	href,
 	linkLabel = 'Открыть',
+	badge,
 }: ProgramCardProps) {
-	return (
-		<li className='bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl p-4 md:p-6 hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 cursor-pointer group flex flex-col'>
+	const content = (
+		<div className='group flex items-center gap-4 p-4 rounded-2xl border border-gray-900 hover:border-gray-800 hover:bg-gray-900/40 transition-all duration-200 cursor-pointer'>
 			{/* Иконка */}
-			<div className='w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform flex-shrink-0'>
+			<div className='w-14 h-14 flex-shrink-0 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-200'>
 				{icon}
 			</div>
 
-			{/* Название */}
-			<h3 className='text-sm md:text-xl font-bold text-white mb-1 md:mb-2 leading-tight line-clamp-2'>
-				{title}
-			</h3>
-
-			{/* Описание */}
-			<p className='text-gray-400 text-xs md:text-sm flex-1 line-clamp-3'>
-				{description}
-			</p>
-
-			{/* Ссылка */}
-			{linkLabel && (
-				<div className='mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-700'>
-					{href ? (
-						<a
-							href={href}
-							className='inline-flex items-center gap-1 md:gap-2 text-gray-500 text-xs md:text-sm group-hover:text-gray-300 transition-colors group-hover:gap-2 md:group-hover:gap-3'
-						>
-							{linkLabel} <span className='transition-all'>→</span>
-						</a>
-					) : (
-						<span className='inline-flex items-center gap-1 md:gap-2 text-gray-500 text-xs md:text-sm'>
-							{linkLabel} <span className='transition-all'>...</span>
+			{/* Текст */}
+			<div className='flex-1 min-w-0'>
+				<div className='flex items-center gap-2 mb-0.5'>
+					<h3 className='text-white font-semibold text-sm leading-tight truncate'>{title}</h3>
+					{badge && (
+						<span className='flex-shrink-0 text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 border border-gray-700'>
+							{badge}
 						</span>
 					)}
 				</div>
-			)}
-		</li>
+				<p className='text-gray-600 text-xs line-clamp-2 leading-relaxed'>{description}</p>
+			</div>
+
+			{/* Кнопка */}
+			<div className='flex-shrink-0'>
+				{href ? (
+					<span className='px-4 py-1.5 rounded-full bg-gray-800 text-gray-300 text-xs font-semibold group-hover:bg-gray-700 group-hover:text-white transition-all border border-gray-700'>
+						{linkLabel}
+					</span>
+				) : (
+					<span className='px-4 py-1.5 rounded-full bg-gray-900 text-gray-600 text-xs font-semibold border border-gray-800'>
+						{linkLabel}
+					</span>
+				)}
+			</div>
+		</div>
 	)
+
+	return href ? <li><a href={href}>{content}</a></li> : <li>{content}</li>
 }

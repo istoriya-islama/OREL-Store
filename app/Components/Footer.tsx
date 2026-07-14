@@ -3,44 +3,43 @@ import { GoHome } from 'react-icons/go'
 
 export default function Footer() {
 	return (
-		<footer className='relative px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-800 bg-gradient-to-r from-black via-gray-900 to-black flex items-center justify-between text-white select-none overflow-hidden'>
-			{/* Декоративный фон */}
-			<div className='absolute inset-0 opacity-10'>
-				<div className='absolute top-0 left-1/4 w-32 h-32 bg-gray-700 rounded-full blur-3xl' />
-				<div className='absolute top-0 right-1/4 w-32 h-32 bg-gray-600 rounded-full blur-3xl' />
+		<footer className='border-t border-gray-900 bg-black/60 backdrop-blur-sm'>
+			<div className='max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4'>
+				<div>
+					<span className='font-black uppercase text-lg tracking-widest text-white'>
+						OREL
+						<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>
+							store
+						</span>
+					</span>
+					<p className='text-gray-700 text-xs mt-0.5'>
+						Магазин приложений OREL
+					</p>
+				</div>
+
+				<div className='flex items-center gap-2'>
+					<a
+						href='https://istoriya-islama.github.io/OREL/'
+						aria-label='Главный сайт'
+						className='p-2.5 rounded-xl border border-gray-900 text-gray-600 hover:text-white hover:border-gray-800 hover:bg-gray-900 transition-all active:scale-95'
+					>
+						<GoHome size={16} />
+					</a>
+					<a
+						href='https://t.me/obr_orel_bot'
+						aria-label='Поддержка'
+						className='p-2.5 rounded-xl border border-gray-900 text-gray-600 hover:text-white hover:border-gray-800 hover:bg-gray-900 transition-all active:scale-95'
+					>
+						<BiSupport size={16} />
+					</a>
+					<a
+						href='https://t.me/obr_orel_bot'
+						className='ml-2 px-4 py-2 rounded-xl text-sm border border-gray-800 text-gray-400 hover:text-white hover:bg-gray-900 transition-all'
+					>
+						Написать отзыв → Поддержка
+					</a>
+				</div>
 			</div>
-
-			{/* Логотип */}
-			<div className='relative z-10'>
-				<h1 className='font-extrabold uppercase text-base sm:text-xl tracking-wider bg-gradient-to-r from-gray-300 to-white bg-clip-text text-transparent'>
-					orel store
-				</h1>
-			</div>
-
-			{/* Иконки */}
-			<nav className='relative z-10'>
-				<ul className='flex items-center gap-2 sm:gap-4'>
-					<li>
-						<a
-							href='https://istoriya-islama.github.io/OREL/'
-							className='p-2.5 sm:p-3 rounded-xl bg-gray-800/30 border border-gray-700 transition-all duration-300 hover:bg-gray-700/50 hover:scale-110 hover:rotate-12 flex items-center justify-center active:scale-95'
-						>
-							<GoHome size={16} className='sm:w-[18px] sm:h-[18px]' />
-						</a>
-					</li>
-					<li>
-						<a
-							href='https://t.me/obr_orel_bot'
-							className='p-2.5 sm:p-3 rounded-xl bg-gray-800/30 border border-gray-700 transition-all duration-300 hover:bg-gray-700/50 hover:scale-110 hover:rotate-12 flex items-center justify-center active:scale-95'
-						>
-							<BiSupport size={16} className='sm:w-[18px] sm:h-[18px]' />
-						</a>
-					</li>
-				</ul>
-			</nav>
-
-			{/* Верхняя декоративная линия */}
-			<div className='absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent' />
 		</footer>
 	)
 }
