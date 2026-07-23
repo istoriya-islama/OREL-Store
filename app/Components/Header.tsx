@@ -1,17 +1,23 @@
 'use client'
 
+import type { User } from '@/app/lib/api'
+import { api } from '@/app/lib/api'
 import { useState } from 'react'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { BiSupport } from 'react-icons/bi'
 import { GoHome } from 'react-icons/go'
-import { IoApps, IoClose, IoMenu } from 'react-icons/io5'
 import { HiUser } from 'react-icons/hi'
-import { api } from '@/app/lib/api'
-import type { User } from '@/app/lib/api'
+import { IoApps, IoClose, IoMenu } from 'react-icons/io5'
 
-const PROFILE_URL = 'https://orel-id.istoriyaislama.workers.dev/pages/user/profile'
+const PROFILE_URL =
+	'https://orel-id.istoriyaislama.workers.dev/pages/user/profile'
 
 // ── Auth Modal ──────────────────────────────────────────────
-function AuthModal({ mode, onClose, onSuccess }: {
+function AuthModal({
+	mode,
+	onClose,
+	onSuccess,
+}: {
 	mode: 'login' | 'register'
 	onClose: () => void
 	onSuccess: (user: User) => void
@@ -22,21 +28,44 @@ function AuthModal({ mode, onClose, onSuccess }: {
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	const handleSubmit = async () => {
 		setError('')
 		setLoading(true)
+		const recaptchaToken = await executeRecaptcha!('register')
 		try {
 			if (tab === 'register') {
-				if (!name.trim()) { setError('Введите имя'); setLoading(false); return }
-				if (!email.includes('@')) { setError('Неверный email'); setLoading(false); return }
-				if (password.length < 6) { setError('Пароль минимум 8 символов'); setLoading(false); return }
-				await api.register({ name, email, password, recaptchaToken: '' })
+				if (!name.trim()) {
+					setError('Введите имя')
+					setLoading(false)
+					return
+				}
+				if (!email.includes('@')) {
+					setError('Неверный email')
+					setLoading(false)
+					return
+				}
+				if (password.length < 6) {
+					setError('Пароль минимум 8 символов')
+					setLoading(false)
+					return
+				}
+				await api.register({
+					name: name,
+					email: email,
+					password: password,
+					recaptchaToken,
+				})
 				// После регистрации — сразу логиним
 				const res = await api.login({ email, password })
 				onSuccess(res.user)
 			} else {
-				if (!email || !password) { setError('Заполните все поля'); setLoading(false); return }
+				if (!email || !password) {
+					setError('Заполните все поля')
+					setLoading(false)
+					return
+				}
 				const res = await api.login({ email, password })
 				onSuccess(res.user)
 			}
@@ -76,9 +105,14 @@ function AuthModal({ mode, onClose, onSuccess }: {
 					{(['login', 'register'] as const).map(t => (
 						<button
 							key={t}
-							onClick={() => { setTab(t); setError('') }}
+							onClick={() => {
+								setTab(t)
+								setError('')
+							}}
 							className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-								tab === t ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-300'
+								tab === t
+									? 'bg-white text-black shadow-sm'
+									: 'text-gray-500 hover:text-gray-300'
 							}`}
 						>
 							{t === 'login' ? 'Войти' : 'Регистрация'}
@@ -122,12 +156,31 @@ function AuthModal({ mode, onClose, onSuccess }: {
 						className='w-full py-3 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-100 active:scale-95 transition-all mt-1 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2'
 					>
 						{loading && (
-							<svg className='animate-spin w-4 h-4' viewBox='0 0 24 24' fill='none'>
-								<circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
-								<path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z' />
+							<svg
+								className='animate-spin w-4 h-4'
+								viewBox='0 0 24 24'
+								fill='none'
+							>
+								<circle
+									className='opacity-25'
+									cx='12'
+									cy='12'
+									r='10'
+									stroke='currentColor'
+									strokeWidth='4'
+								/>
+								<path
+									className='opacity-75'
+									fill='currentColor'
+									d='M4 12a8 8 0 018-8v8z'
+								/>
 							</svg>
 						)}
-						{loading ? 'Загрузка...' : tab === 'login' ? 'Войти' : 'Создать аккаунт'}
+						{loading
+							? 'Загрузка...'
+							: tab === 'login'
+								? 'Войти'
+								: 'Создать аккаунт'}
 					</button>
 				</div>
 			</div>
@@ -168,7 +221,10 @@ function UserWidget({
 
 				{userMenuOpen && (
 					<>
-						<div className='fixed inset-0 z-10' onClick={() => setUserMenuOpen(false)} />
+						<div
+							className='fixed inset-0 z-10'
+							onClick={() => setUserMenuOpen(false)}
+						/>
 						<div className='absolute right-0 top-full mt-2 w-44 bg-gray-950 border border-gray-800 rounded-xl shadow-2xl z-20 overflow-hidden'>
 							<a
 								href={PROFILE_URL}
@@ -197,7 +253,9 @@ function UserWidget({
 			<button
 				onClick={() => onOpenAuth('login')}
 				className={`${
-					mobile ? 'w-full py-2.5 rounded-xl text-center' : 'px-4 py-2 rounded-xl text-sm'
+					mobile
+						? 'w-full py-2.5 rounded-xl text-center'
+						: 'px-4 py-2 rounded-xl text-sm'
 				} border border-gray-800 text-gray-400 font-medium hover:bg-gray-900 hover:text-white transition-all active:scale-95`}
 			>
 				Войти
@@ -205,7 +263,9 @@ function UserWidget({
 			<button
 				onClick={() => onOpenAuth('register')}
 				className={`${
-					mobile ? 'w-full py-2.5 rounded-xl text-center' : 'px-4 py-2 rounded-xl text-sm'
+					mobile
+						? 'w-full py-2.5 rounded-xl text-center'
+						: 'px-4 py-2 rounded-xl text-sm'
 				} bg-white text-black font-bold hover:bg-gray-100 transition-all active:scale-95`}
 			>
 				Регистрация
@@ -223,7 +283,8 @@ export default function Header({ activityPage }: { activityPage: string }) {
 
 	// Проверяем текущего пользователя через API при монтировании
 	useState(() => {
-		api.getCurrentUser()
+		api
+			.getCurrentUser()
 			.then(u => setUser(u))
 			.catch(() => setUser(null))
 	})
@@ -249,9 +310,21 @@ export default function Header({ activityPage }: { activityPage: string }) {
 	]
 
 	const iconLinks = [
-		{ href: 'https://istoriya-islama.github.io/OREL/', icon: <GoHome size={18} />, label: 'Сайт' },
-		{ href: 'https://orel-insider.onrender.com/', icon: <IoApps size={18} />, label: 'Инсайдер' },
-		{ href: 'https://t.me/obr_orel_bot', icon: <BiSupport size={18} />, label: 'Поддержка' },
+		{
+			href: 'https://istoriya-islama.github.io/OREL/',
+			icon: <GoHome size={18} />,
+			label: 'Сайт',
+		},
+		{
+			href: 'https://orel-insider.onrender.com/',
+			icon: <IoApps size={18} />,
+			label: 'Инсайдер',
+		},
+		{
+			href: 'https://t.me/obr_orel_bot',
+			icon: <BiSupport size={18} />,
+			label: 'Поддержка',
+		},
 	]
 
 	return (
@@ -274,25 +347,42 @@ export default function Header({ activityPage }: { activityPage: string }) {
 						{menuOpen ? <IoClose size={20} /> : <IoMenu size={20} />}
 					</button>
 
-					<a href={'/'} className='font-black uppercase text-xl tracking-widest'>
-						OREL<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>store</span>
+					<a
+						href={'/'}
+						className='font-black uppercase text-xl tracking-widest'
+					>
+						OREL
+						<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>
+							store
+						</span>
 					</a>
 
 					<button
-						onClick={() => user ? window.open(PROFILE_URL, '_blank') : setAuthMode('login')}
+						onClick={() =>
+							user ? window.open(PROFILE_URL, '_blank') : setAuthMode('login')
+						}
 						className='p-2 rounded-xl bg-gray-900 border border-gray-800 active:scale-95 transition-all'
 					>
-						{user
-							? <div className='w-5 h-5 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold'>{user.name.charAt(0)}</div>
-							: <HiUser size={20} className='text-gray-400' />
-						}
+						{user ? (
+							<div className='w-5 h-5 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold'>
+								{user.name.charAt(0)}
+							</div>
+						) : (
+							<HiUser size={20} className='text-gray-400' />
+						)}
 					</button>
 				</div>
 
 				{/* Desktop */}
 				<div className='hidden md:flex items-center justify-between px-8 py-4 max-w-7xl mx-auto'>
-					<a href={'/'} className='font-black uppercase text-xl tracking-widest flex-shrink-0'>
-						OREL<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>store</span>
+					<a
+						href={'/'}
+						className='font-black uppercase text-xl tracking-widest flex-shrink-0'
+					>
+						OREL
+						<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>
+							store
+						</span>
 					</a>
 
 					<nav className='flex items-center gap-0.5'>
@@ -338,23 +428,38 @@ export default function Header({ activityPage }: { activityPage: string }) {
 			{/* Mobile drawer */}
 			<div
 				className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${
-					menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+					menuOpen
+						? 'opacity-100 pointer-events-auto'
+						: 'opacity-0 pointer-events-none'
 				}`}
 			>
-				<div className='absolute inset-0 bg-black/70 backdrop-blur-sm' onClick={() => setMenuOpen(false)} />
+				<div
+					className='absolute inset-0 bg-black/70 backdrop-blur-sm'
+					onClick={() => setMenuOpen(false)}
+				/>
 
-				<div className={`absolute top-0 left-0 h-full w-72 bg-gray-950 border-r border-gray-800 flex flex-col transition-transform duration-300 ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+				<div
+					className={`absolute top-0 left-0 h-full w-72 bg-gray-950 border-r border-gray-800 flex flex-col transition-transform duration-300 ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+				>
 					<div className='flex items-center justify-between px-5 py-5 border-b border-gray-800'>
 						<span className='font-black uppercase text-lg tracking-widest'>
-							OREL <span className='text-gray-600 font-light normal-case tracking-normal text-sm'>store</span>
+							OREL{' '}
+							<span className='text-gray-600 font-light normal-case tracking-normal text-sm'>
+								store
+							</span>
 						</span>
-						<button onClick={() => setMenuOpen(false)} className='p-2 rounded-xl bg-gray-900 border border-gray-800 active:scale-95'>
+						<button
+							onClick={() => setMenuOpen(false)}
+							className='p-2 rounded-xl bg-gray-900 border border-gray-800 active:scale-95'
+						>
 							<IoClose size={18} />
 						</button>
 					</div>
 
 					<nav className='flex-1 px-4 py-5'>
-						<p className='text-gray-700 text-xs uppercase tracking-widest mb-3 px-1'>Разделы</p>
+						<p className='text-gray-700 text-xs uppercase tracking-widest mb-3 px-1'>
+							Разделы
+						</p>
 						<ul className='flex flex-col gap-1'>
 							{navLinks.map(link => (
 								<li key={link.key}>
@@ -378,14 +483,19 @@ export default function Header({ activityPage }: { activityPage: string }) {
 					</nav>
 
 					<div className='px-4 py-5 border-t border-gray-800'>
-						<p className='text-gray-700 text-xs uppercase tracking-widest mb-3'>Аккаунт</p>
+						<p className='text-gray-700 text-xs uppercase tracking-widest mb-3'>
+							Аккаунт
+						</p>
 						<UserWidget
 							user={user}
 							mobile={true}
 							userMenuOpen={userMenuOpen}
 							setUserMenuOpen={setUserMenuOpen}
 							onLogout={handleLogout}
-							onOpenAuth={(m) => { setAuthMode(m); setMenuOpen(false) }}
+							onOpenAuth={m => {
+								setAuthMode(m)
+								setMenuOpen(false)
+							}}
 						/>
 						<div className='flex gap-2 mt-3'>
 							{iconLinks.map((item, i) => (

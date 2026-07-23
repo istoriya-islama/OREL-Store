@@ -1,36 +1,39 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Footer from "./Components/Footer";
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import Footer from './Components/Footer'
+import { ReCaptchaProvider } from './Components/ReCaptchaProvider'
+import './globals.css'
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+	variable: '--font-geist-sans',
+	subsets: ['latin'],
+})
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+	variable: '--font-geist-mono',
+	subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
-  title: "OREL Store",
-  description: "App Store for OREL program and OREL Theme Store",
-};
+	title: 'OREL Store',
+	description: 'App Store for OREL program and OREL Theme Store',
+}
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-        <Footer />
-      </body>
-    </html>
-  );
+	return (
+		<html lang='en'>
+			<ReCaptchaProvider>
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				>
+					{children}
+					<Footer />
+				</body>
+			</ReCaptchaProvider>
+		</html>
+	)
 }
