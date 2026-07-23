@@ -51,7 +51,7 @@ export async function fetchWithAuth(
 			} catch {}
 
 			if (typeof window !== 'undefined') {
-				window.location.href = '/pages/auth/login'
+				console.log("Not Account OREL ID")
 			}
 
 			throw error
