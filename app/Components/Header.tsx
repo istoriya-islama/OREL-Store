@@ -353,7 +353,7 @@ export default function Header({ activityPage }: { activityPage: string }) {
 					>
 						OREL
 						<span className='text-gray-600 font-light normal-case tracking-normal text-sm ml-1'>
-							store
+							Store
 						</span>
 					</a>
 
@@ -445,7 +445,7 @@ export default function Header({ activityPage }: { activityPage: string }) {
 						<span className='font-black uppercase text-lg tracking-widest'>
 							OREL{' '}
 							<span className='text-gray-600 font-light normal-case tracking-normal text-sm'>
-								store
+								Store
 							</span>
 						</span>
 						<button
